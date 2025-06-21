@@ -1,0 +1,27 @@
+modules = ["python-3.11"]
+
+[nix]
+channel = "stable-24_05"
+
+[workflows]
+runButton = "Project"
+
+[[workflows.workflow]]
+name = "Project"
+mode = "parallel"
+author = "agent"
+
+[[workflows.workflow.tasks]]
+task = "workflow.run"
+args = "Discord AI Bot"
+
+[[workflows.workflow]]
+name = "Discord AI Bot"
+author = "agent"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "pip install discord.py aiohttp python-dotenv && python main.py"
+
+[deployment]
+run = ["sh", "-c", "pip install discord.py aiohttp python-dotenv && python main.py"]
