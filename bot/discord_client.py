@@ -4,6 +4,7 @@ Discord bot client with AI chat integration
 
 import logging
 import asyncio
+import random
 from typing import Optional
 import discord
 from discord.ext import commands
@@ -45,6 +46,12 @@ class DiscordBot(commands.Bot):
         
         # Add commands
         await self.add_cog(ChatCommands(self))
+        
+        # Import and add new command cogs
+        from bot.fun_commands import FunCommands
+        from bot.admin_commands import AdminCommands
+        await self.add_cog(FunCommands(self))
+        await self.add_cog(AdminCommands(self))
         
         logger.info("Discord bot setup complete")
     
@@ -109,6 +116,14 @@ class DiscordBot(commands.Bot):
         try:
             # Show typing indicator
             async with message.channel.typing():
+                # Add auto-reactions if enabled
+                if self.config.enable_auto_reactions and random.random() < 0.1:  # 10% chance
+                    reactions = ["👍", "😊", "🤔", "💡", "❤️", "🎉"]
+                    try:
+                        await message.add_reaction(random.choice(reactions))
+                    except:
+                        pass  # Ignore reaction errors
+                
                 # Add user message to history
                 self.chat_manager.add_message(
                     channel_id=message.channel.id,
@@ -271,44 +286,74 @@ class ChatCommands(commands.Cog):
             await ctx.send("❌ Error retrieving statistics.")
     
     @commands.command(name="help")
-    async def help_command(self, ctx: commands.Context):
+    async def help_command(self, ctx: commands.Context, category: str = None):
         """Show help information"""
-        embed = discord.Embed(
-            title="🤖 AI Chat Bot Help",
-            description="I'm an AI assistant powered by DeepSeek. Here's how to interact with me:",
-            color=discord.Color.green()
-        )
+        if category == "fun":
+            embed = discord.Embed(
+                title="🎮 Fun Commands",
+                description="Entertainment and games!",
+                color=discord.Color.gold()
+            )
+            embed.add_field(name=f"{self.bot.config.command_prefix}joke", value="Tell a random joke", inline=True)
+            embed.add_field(name=f"{self.bot.config.command_prefix}fun", value="Random fun activities", inline=True)
+            embed.add_field(name=f"{self.bot.config.command_prefix}roll [sides]", value="Roll a dice", inline=True)
+            embed.add_field(name=f"{self.bot.config.command_prefix}flip", value="Flip a coin", inline=True)
+            embed.add_field(name=f"{self.bot.config.command_prefix}guess [max]", value="Number guessing game", inline=True)
+            embed.add_field(name=f"{self.bot.config.command_prefix}game <type>", value="Start mini-games (trivia, math, word, riddle)", inline=False)
+            
+        elif category == "admin" and ctx.author.id == self.bot.config.admin_user_id:
+            embed = discord.Embed(
+                title="⚙️ Admin Commands",
+                description="Bot management commands (Admin only)",
+                color=discord.Color.red()
+            )
+            embed.add_field(name=f"{self.bot.config.command_prefix}setchannel [#channel]", value="Set main chat channel", inline=True)
+            embed.add_field(name=f"{self.bot.config.command_prefix}unsetchannel", value="Remove channel restriction", inline=True)
+            embed.add_field(name=f"{self.bot.config.command_prefix}setprefix <prefix>", value="Change command prefix", inline=True)
+            embed.add_field(name=f"{self.bot.config.command_prefix}botstats", value="Detailed bot statistics", inline=True)
+            embed.add_field(name=f"{self.bot.config.command_prefix}clearall", value="Clear all chat history", inline=True)
+            embed.add_field(name=f"{self.bot.config.command_prefix}say [#channel] <message>", value="Make bot say something", inline=True)
+            embed.add_field(name=f"{self.bot.config.command_prefix}shutdown", value="Shutdown bot", inline=True)
+            embed.add_field(name=f"{self.bot.config.command_prefix}eval <code>", value="Execute Python code", inline=True)
+            
+        else:
+            embed = discord.Embed(
+                title="🤖 AI Chat Bot Help",
+                description="I'm an AI assistant powered by DeepSeek. Here's how to interact with me:",
+                color=discord.Color.green()
+            )
+            
+            embed.add_field(
+                name="💬 Chat Commands",
+                value=f"`{self.bot.config.command_prefix}ask <question>` - Direct question\n"
+                      f"`{self.bot.config.command_prefix}chat <message>` - Chat with history\n"
+                      f"`{self.bot.config.command_prefix}clear` - Clear history\n"
+                      f"`{self.bot.config.command_prefix}stats` - Chat statistics",
+                inline=False
+            )
+            
+            embed.add_field(
+                name="🎮 Fun & Games",
+                value=f"`{self.bot.config.command_prefix}help fun` - See all fun commands\n"
+                      f"`{self.bot.config.command_prefix}joke` - Random joke\n"
+                      f"`{self.bot.config.command_prefix}game trivia` - Play trivia\n"
+                      f"`{self.bot.config.command_prefix}guess` - Number guessing",
+                inline=False
+            )
+            
+            embed.add_field(
+                name="ℹ️ Other Commands",
+                value=f"`{self.bot.config.command_prefix}invite` - Get bot invite link\n"
+                      f"**Natural Chat:** Just mention me or send a DM!",
+                inline=False
+            )
+            
+            if ctx.author.id == self.bot.config.admin_user_id:
+                embed.add_field(
+                    name="⚙️ Admin",
+                    value=f"`{self.bot.config.command_prefix}help admin` - Admin commands",
+                    inline=False
+                )
         
-        embed.add_field(
-            name="💬 Natural Chat",
-            value="Just mention me or send a DM to start chatting!",
-            inline=False
-        )
-        
-        embed.add_field(
-            name=f"{self.bot.config.command_prefix}ask <question>",
-            value="Ask me a direct question (no history)",
-            inline=False
-        )
-        
-        embed.add_field(
-            name=f"{self.bot.config.command_prefix}chat <message>",
-            value="Chat with conversation history",
-            inline=False
-        )
-        
-        embed.add_field(
-            name=f"{self.bot.config.command_prefix}clear",
-            value="Clear conversation history",
-            inline=False
-        )
-        
-        embed.add_field(
-            name=f"{self.bot.config.command_prefix}stats",
-            value="Show chat statistics",
-            inline=False
-        )
-        
-        embed.set_footer(text="Powered by OpenRouter & DeepSeek")
-        
+        embed.set_footer(text=f"Powered by OpenRouter & DeepSeek | Support: {self.bot.config.help_server_invite}")
         await ctx.send(embed=embed)

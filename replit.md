@@ -95,12 +95,14 @@ The application follows a modular architecture with separation of concerns:
 
 ## Recent Changes
 
-- June 21, 2025: Complete Discord AI chatbot implementation
-  - Successfully deployed with Discord and OpenRouter API integration
-  - Bot "ARIS#5264" online and functional in 5 Discord servers
-  - All features tested and working: commands, chat history, rate limiting
-  - Fixed Discord intents configuration issue
-  - Environment secrets properly configured
+- June 21, 2025: Enhanced Discord AI chatbot with advanced features
+  - Added comprehensive fun commands: joke, game (trivia/math/word/riddle), guess, roll, flip
+  - Implemented admin command system with channel management and prefix control
+  - Set user ID 782306059469193257 as bot administrator
+  - Added support server integration (https://discord.gg/k7Sss4yKj5)
+  - Enhanced help system with categorized command display
+  - Added auto-reaction feature for improved user engagement
+  - Bot successfully restarted with all new features functional
 
 ## Changelog
 

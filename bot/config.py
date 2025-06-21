@@ -14,6 +14,10 @@ class BotConfig:
         self.command_prefix: str = os.getenv("COMMAND_PREFIX", "!")
         self.chat_channel_id: Optional[int] = self._get_channel_id()
         
+        # Admin settings
+        self.admin_user_id: int = int(os.getenv("ADMIN_USER_ID", "782306059469193257"))
+        self.help_server_invite: str = os.getenv("HELP_SERVER_INVITE", "https://discord.gg/k7Sss4yKj5")
+        
         # OpenRouter settings
         self.openrouter_api_key: str = os.getenv("OPENROUTER_API_KEY", "")
         self.openrouter_base_url: str = "https://openrouter.ai/api/v1"
@@ -23,6 +27,10 @@ class BotConfig:
         self.system_prompt: str = self._get_system_prompt()
         self.max_history_messages: int = int(os.getenv("MAX_HISTORY_MESSAGES", "20"))
         self.max_response_length: int = int(os.getenv("MAX_RESPONSE_LENGTH", "2000"))
+        
+        # Fun features
+        self.enable_auto_reactions: bool = os.getenv("ENABLE_AUTO_REACTIONS", "true").lower() == "true"
+        self.daily_greeting: bool = os.getenv("DAILY_GREETING", "false").lower() == "true"
         
         # Rate limiting settings
         self.rate_limit_requests: int = int(os.getenv("RATE_LIMIT_REQUESTS", "10"))
