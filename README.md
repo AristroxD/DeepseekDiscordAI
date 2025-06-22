@@ -40,7 +40,7 @@ A Discord bot powered by OpenRouter's DeepSeek model that provides real-time AI 
 
 1. **Clone and Setup**:
    ```bash
-   git clone <repository>
+   git clone <DeepseekDiscordAI>
    cd discord-ai-bot
    ```
 
