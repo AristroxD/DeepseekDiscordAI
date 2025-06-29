@@ -12,6 +12,7 @@ A Discord bot powered by OpenRouter's DeepSeek model that provides real-time AI 
 - 🎯 **Typing Indicators**: Shows when bot is generating responses
 - 📊 **Statistics**: Track conversation metrics
 - 🛡️ **Error Handling**: Robust error handling and logging
+- 📦 **mongoDB support**: It comes with mongoDB support.
 
 ## Commands
 
@@ -36,15 +37,3 @@ A Discord bot powered by OpenRouter's DeepSeek model that provides real-time AI 
    - Get your API key from the dashboard
    - The bot uses the free `deepseek/deepseek-r1-0528-qwen3-8b:free` model
 
-### Local Development
-
-1. **Clone and Setup**:
-   ```bash
-   git clone <repository>
-   cd discord-ai-bot
-   ```
-
-2. **Install Dependencies**:
-   ```bash
-   pip install discord.py aiohttp python-dotenv
-   

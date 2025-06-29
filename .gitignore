@@ -1,0 +1,34 @@
+# Environment and secrets
+.env
+.env.*
+
+# Log files
+bot.log
+*.log
+
+# Python cache and build
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# VSCode settings
+.vscode/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Dependency/lock files
+uv.lock
+
+# Jupyter and notebook checkpoints
+.ipynb_checkpoints/
+
+# Other
+*.sqlite3
+
+# Ignore database dumps/backups
+*.bak
+*.sql
+*.dump

@@ -7,6 +7,7 @@ import json
 import discord
 from discord.ext import commands
 from typing import Optional
+from bot.db import get_collection  # <-- Add this import
 
 logger = logging.getLogger(__name__)
 
@@ -32,6 +33,15 @@ class AdminCommands(commands.Cog):
         
         # Update the bot's chat channel
         self.bot.config.chat_channel_id = channel.id
+        
+        # Save to MongoDB for persistence
+        channels = get_collection("channels")
+        if ctx.guild:
+            channels.update_one(
+                {"guild_id": ctx.guild.id},
+                {"$set": {"guild_id": ctx.guild.id, "channel_id": channel.id}},
+                upsert=True
+            )
         
         embed = discord.Embed(
             title="✅ Chat Channel Updated",

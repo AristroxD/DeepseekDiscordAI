@@ -40,6 +40,16 @@ class DiscordBot(commands.Bot):
         """Setup hook called when bot is starting"""
         logger.info("Setting up Discord bot...")
         
+        # Load chat channel from MongoDB if available
+        from bot.db import get_collection
+        channels = get_collection("channels")
+        if self.guilds:
+            for guild in self.guilds:
+                doc = channels.find_one({"guild_id": guild.id})
+                if doc:
+                    self.config.chat_channel_id = doc["channel_id"]
+                    logger.info(f"Loaded chat channel {doc['channel_id']} for guild {guild.id}")
+        
         # Initialize OpenRouter client
         self.openrouter_client = OpenRouterClient(self.config)
         await self.openrouter_client.create_session()

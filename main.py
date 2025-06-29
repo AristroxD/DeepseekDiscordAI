@@ -1,12 +1,8 @@
-#!/usr/bin/env python3
-"""
-Discord AI Chatbot - Main Entry Point
-Connects to Discord and OpenRouter for real-time AI conversations
-"""
-
+# Deepseek Discord AI Chatbot
 import asyncio
 import logging
 import os
+import sys
 from dotenv import load_dotenv
 from bot.discord_client import DiscordBot
 from bot.config import BotConfig
@@ -25,6 +21,10 @@ logging.basicConfig(
 )
 
 logger = logging.getLogger(__name__)
+
+# Set event loop policy for Windows
+if sys.platform.startswith('win'):
+    asyncio.set_event_loop_policy(asyncio.WindowsSelectorEventLoopPolicy())
 
 async def main():
     """Main function to start the Discord bot"""
