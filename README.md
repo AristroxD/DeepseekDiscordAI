@@ -37,3 +37,18 @@ A Discord bot powered by OpenRouter's DeepSeek model that provides real-time AI 
    - Get your API key from the dashboard
    - The bot uses the free `deepseek/deepseek-r1-0528-qwen3-8b:free` model
 
+<<<<<<< HEAD
+=======
+### Local Development
+
+1. **Clone and Setup**:
+   ```bash
+   git clone <DeepseekDiscordAI>
+   cd discord-ai-bot
+   ```
+
+2. **Install Dependencies**:
+   ```bash
+   pip install discord.py aiohttp python-dotenv
+   
+>>>>>>> 86dbade033748cf0201cef423ff22aa35a440003
